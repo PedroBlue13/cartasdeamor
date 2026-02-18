@@ -4,8 +4,10 @@ import hashlib
 import hmac
 import json
 import logging
+import mimetypes
 from datetime import datetime
 from decimal import Decimal
+from pathlib import Path
 
 from django.conf import settings
 from django.contrib import messages
@@ -13,11 +15,12 @@ from django.contrib.auth import login, logout
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.hashers import check_password, make_password
 from django.contrib.auth.views import redirect_to_login
-from django.http import Http404, HttpRequest, HttpResponse, HttpResponseForbidden, JsonResponse
+from django.http import FileResponse, Http404, HttpRequest, HttpResponse, HttpResponseForbidden, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
-from django.utils.http import url_has_allowed_host_and_scheme
 from django.utils import timezone
+from django.utils._os import safe_join
+from django.utils.http import url_has_allowed_host_and_scheme
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_GET, require_http_methods, require_POST
 
@@ -455,3 +458,23 @@ def mercado_pago_webhook(request: HttpRequest) -> HttpResponse:
 @require_GET
 def health(request: HttpRequest) -> JsonResponse:
     return JsonResponse({"status": "ok", "time": datetime.utcnow().isoformat()})
+
+
+@require_GET
+def media_file(request: HttpRequest, file_path: str) -> HttpResponse:
+    # Try current and legacy media roots to avoid broken links after deploy/storage changes.
+    candidates: list[Path] = []
+    for root in settings.MEDIA_FALLBACK_DIRS:
+        try:
+            candidates.append(Path(safe_join(root, file_path)))
+        except Exception:
+            continue
+
+    for candidate in candidates:
+        if candidate.exists() and candidate.is_file():
+            content_type, _ = mimetypes.guess_type(candidate.name)
+            response = FileResponse(open(candidate, "rb"), content_type=content_type or "application/octet-stream")
+            response["Cache-Control"] = "public, max-age=3600"
+            return response
+
+    raise Http404("Arquivo de midia nao encontrado.")
