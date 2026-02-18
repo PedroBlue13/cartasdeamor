@@ -3,6 +3,7 @@ from __future__ import annotations
 import hashlib
 import hmac
 import json
+import logging
 from datetime import datetime
 from decimal import Decimal
 
@@ -28,6 +29,7 @@ except Exception:  # pragma: no cover
 
 
 WIZARD_STEPS = {1, 2, 3, 4, 5, 6}
+logger = logging.getLogger(__name__)
 
 
 def _current_letter_id(request: HttpRequest) -> str | None:
@@ -88,8 +90,21 @@ def create_step(request: HttpRequest, step: int) -> HttpResponse:
         form = PhotoUploadForm(request.POST or None, request.FILES or None)
         if request.method == "POST" and form.is_valid():
             files = form.cleaned_data["photos"]
-            for image in files:
-                LovePhoto.objects.create(letter=letter, image=image)
+            try:
+                for image in files:
+                    LovePhoto.objects.create(letter=letter, image=image)
+            except Exception:
+                logger.exception("Erro ao salvar fotos da carta %s", letter.id)
+                messages.error(
+                    request,
+                    "Nao foi possivel salvar as fotos agora. Tente novamente em alguns instantes.",
+                )
+                return render(
+                    request,
+                    "letters/wizard_step_4.html",
+                    {"form": form, "step": step, "letter": letter, "photos": letter.photos.all()},
+                    status=500,
+                )
             if files:
                 messages.success(request, f"{len(files)} foto(s) adicionada(s) com sucesso.")
             else:
