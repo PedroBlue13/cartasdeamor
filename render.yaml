@@ -7,6 +7,10 @@ services:
     startCommand: gunicorn config.wsgi:application
     healthCheckPath: /health/
     autoDeploy: true
+    disk:
+      name: cartas-media
+      mountPath: /var/data
+      sizeGB: 1
     envVars:
       - key: SECRET_KEY
         generateValue: true
@@ -18,6 +22,8 @@ services:
         fromDatabase:
           name: cartas-de-amor-db
           property: connectionString
+      - key: MEDIA_ROOT
+        value: /var/data/media
       - key: SECURE_SSL_REDIRECT
         value: "True"
       - key: SESSION_COOKIE_SECURE
