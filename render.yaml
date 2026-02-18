@@ -2,7 +2,6 @@ services:
   - type: web
     name: cartas-de-amor
     env: python
-    rootDir: cartas_de_amor
     buildCommand: bash build.sh
     startCommand: gunicorn config.wsgi:application
     healthCheckPath: /health/
