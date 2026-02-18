@@ -80,6 +80,29 @@ Atualmente as fotos vão para `media/`. Em produção, o ideal é:
 - usar **Persistent Disk** na Render, ou
 - mover para storage externo (S3/Cloudinary).
 
+### Recuperação de senha por email (produção)
+O sistema já está preparado para SMTP em produção.
+
+Variáveis recomendadas na Render:
+- `EMAIL_BACKEND=django.core.mail.backends.smtp.EmailBackend`
+- `DEFAULT_FROM_EMAIL=nao-responda@seudominio.com`
+- `EMAIL_HOST=smtp.resend.com` (ou SMTP do seu provedor)
+- `EMAIL_PORT=587`
+- `EMAIL_HOST_USER=<usuario SMTP>`
+- `EMAIL_HOST_PASSWORD=<senha SMTP>`
+- `EMAIL_USE_TLS=True`
+- `EMAIL_USE_SSL=False`
+- `EMAIL_TIMEOUT=30`
+
+Provedores comuns:
+- Resend SMTP
+- SendGrid SMTP
+- Mailgun SMTP
+
+Em desenvolvimento local, mantenha:
+- `EMAIL_BACKEND=django.core.mail.backends.console.EmailBackend`
+para imprimir o link de reset no terminal.
+
 ## Tailwind
 O projeto já funciona com Tailwind via CDN e também inclui pipeline de build local.
 
@@ -106,12 +129,13 @@ Saída: `static/css/output.css`
 
 ## Fluxo principal
 1. Home (`/`)
-2. Wizard mobile-first (`/criar/etapa/<n>/`)
-3. Preview (`/preview/<uuid>/`)
-4. Pagamento (`/pagamento/<uuid>/`)
-5. Carta pública (`/carta/<uuid>/`)
-6. Unlock por senha (`/carta/<uuid>/unlock/`)
-7. QR da carta (`/carta/<uuid>/qr/`)
+2. Conta e histórico (`/conta/*`, `/minhas-cartas/`)
+3. Wizard mobile-first (`/criar/etapa/<n>/`)
+4. Preview (`/preview/<uuid>/`)
+5. Pagamento (`/pagamento/<uuid>/`)
+6. Carta pública (`/carta/<uuid>/`)
+7. Unlock por senha (`/carta/<uuid>/unlock/`)
+8. QR da carta (`/carta/<uuid>/qr/`)
 
 ## Pagamentos
 Valor fixo: **R$ 3,99** (pagamento único)
@@ -137,6 +161,12 @@ Valor fixo: **R$ 3,99** (pagamento único)
 - Carta pode ser protegida por senha
 - Senha armazenada com hash (`make_password`)
 - Desbloqueio via tela dedicada
+
+## Usuários
+- Cadastro, login e logout
+- Histórico em `minhas-cartas`
+- Edição de perfil e troca de senha em `conta/perfil`
+- Recuperação de senha por email (`conta/recuperar-senha`)
 
 ## Segurança
 - CSRF ativo em todos os formulários

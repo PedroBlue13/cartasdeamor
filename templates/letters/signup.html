@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Cadastro | Cartas de Amor{% endblock %}
+{% block content %}
+<section class="mx-auto max-w-md animate__animated animate__fadeInUp rounded-3xl border border-base-300 bg-base-200 p-6 shadow-soft">
+  <h1 class="text-2xl font-semibold text-love-100">Criar conta</h1>
+  <p class="mt-2 text-sm text-base-400">Salve suas cartas e acompanhe seu histórico.</p>
+  <form method="post" class="mt-5 space-y-4">
+    {% csrf_token %}
+    <div>
+      <label class="mb-2 block text-sm text-base-400">Usuário</label>
+      {{ form.username }}
+      <p class="mt-1 text-xs text-love-200">{{ form.username.errors|striptags }}</p>
+    </div>
+    <div>
+      <label class="mb-2 block text-sm text-base-400">Email</label>
+      {{ form.email }}
+      <p class="mt-1 text-xs text-love-200">{{ form.email.errors|striptags }}</p>
+    </div>
+    <div>
+      <label class="mb-2 block text-sm text-base-400">Senha</label>
+      {{ form.password1 }}
+      <p class="mt-1 text-xs text-love-200">{{ form.password1.errors|striptags }}</p>
+    </div>
+    <div>
+      <label class="mb-2 block text-sm text-base-400">Confirmar senha</label>
+      {{ form.password2 }}
+      <p class="mt-1 text-xs text-love-200">{{ form.password2.errors|striptags }}</p>
+    </div>
+    <button data-loading-text="Criando conta..." class="w-full rounded-2xl bg-love-400 px-5 py-4 text-base font-semibold text-white">Criar conta</button>
+  </form>
+  <p class="mt-4 text-center text-sm text-base-400">
+    Já tem conta?
+    <a href="{% url 'letters:login' %}" class="text-love-100">Entrar</a>
+  </p>
+</section>
+{% endblock %}

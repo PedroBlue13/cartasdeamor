@@ -30,6 +30,13 @@ class LoveLetter(models.Model):
     ]
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="love_letters",
+        null=True,
+        blank=True,
+    )
     beloved_name = models.CharField(max_length=120)
     beloved_nickname = models.CharField(max_length=120, blank=True)
     sender_name = models.CharField(max_length=120, blank=True)
@@ -83,4 +90,3 @@ class PaymentRecord(models.Model):
     raw_payload = models.JSONField(default=dict, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-

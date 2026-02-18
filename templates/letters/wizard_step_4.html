@@ -16,7 +16,20 @@
     <div id="preview-grid" class="grid grid-cols-2 gap-3"></div>
     <div class="grid grid-cols-2 gap-3">
       {% for photo in photos %}
-        <img src="{{ photo.image.url }}" alt="Foto" class="h-36 w-full rounded-2xl object-cover">
+        <div class="relative overflow-hidden rounded-2xl">
+          <img src="{{ photo.image.url }}" alt="Foto" class="h-36 w-full rounded-2xl object-cover">
+          <button
+            type="button"
+            data-open-modal="confirm-action-modal"
+            data-confirm-action="{% url 'letters:delete_photo' photo_id=photo.id %}?next={{ request.path|urlencode }}"
+            data-confirm-title="Remover foto?"
+            data-confirm-text="Essa foto sera removida da carta."
+            data-confirm-button="Remover foto"
+            class="absolute bottom-2 right-2 rounded-xl bg-base-100/85 px-3 py-1 text-xs text-love-300"
+          >
+            Remover
+          </button>
+        </div>
       {% empty %}
         <div class="col-span-2 rounded-2xl border border-dashed border-base-300 p-5 text-center text-sm text-base-400">Nenhuma foto adicionada ainda.</div>
       {% endfor %}

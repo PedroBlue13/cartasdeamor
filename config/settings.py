@@ -8,7 +8,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = config("SECRET_KEY", default="django-insecure-change-me")
 DEBUG = config("DEBUG", default=True, cast=bool)
-SERVE_MEDIA_FILES = config("SERVE_MEDIA_FILES", default=DEBUG, cast=bool)
+SERVE_MEDIA_FILES = config("SERVE_MEDIA_FILES", default=True, cast=bool)
 ALLOWED_HOSTS = config("ALLOWED_HOSTS", default="127.0.0.1,localhost", cast=Csv())
 CSRF_TRUSTED_ORIGINS = config("CSRF_TRUSTED_ORIGINS", default="", cast=Csv())
 ALLOWED_HOSTS = [host for host in ALLOWED_HOSTS if host]
@@ -117,3 +117,20 @@ USE_X_FORWARDED_HOST = True
 SECURE_SSL_REDIRECT = config("SECURE_SSL_REDIRECT", default=not DEBUG, cast=bool)
 SESSION_COOKIE_SECURE = config("SESSION_COOKIE_SECURE", default=not DEBUG, cast=bool)
 CSRF_COOKIE_SECURE = config("CSRF_COOKIE_SECURE", default=not DEBUG, cast=bool)
+
+LOGIN_URL = "/conta/entrar/"
+LOGIN_REDIRECT_URL = "/minhas-cartas/"
+LOGOUT_REDIRECT_URL = "/"
+
+EMAIL_BACKEND = config("EMAIL_BACKEND", default="django.core.mail.backends.console.EmailBackend")
+DEFAULT_FROM_EMAIL = config("DEFAULT_FROM_EMAIL", default="nao-responda@cartasdeamor.com")
+EMAIL_HOST = config("EMAIL_HOST", default="")
+EMAIL_PORT = config("EMAIL_PORT", default=587, cast=int)
+EMAIL_HOST_USER = config("EMAIL_HOST_USER", default="")
+EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD", default="")
+EMAIL_USE_TLS = config("EMAIL_USE_TLS", default=True, cast=bool)
+EMAIL_USE_SSL = config("EMAIL_USE_SSL", default=False, cast=bool)
+EMAIL_TIMEOUT = config("EMAIL_TIMEOUT", default=30, cast=int)
+
+if not DEBUG and EMAIL_BACKEND == "django.core.mail.backends.console.EmailBackend":
+    EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"

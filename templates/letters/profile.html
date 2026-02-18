@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}Perfil | Cartas de Amor{% endblock %}
+{% block content %}
+<section class="space-y-5">
+  <article class="animate__animated animate__fadeInUp rounded-3xl border border-base-300 bg-base-200 p-6 shadow-soft">
+    <h1 class="text-2xl font-semibold text-love-100">Meu perfil</h1>
+    <p class="mt-2 text-sm text-base-400">Atualize seus dados da conta.</p>
+    <form method="post" class="mt-5 space-y-4">
+      {% csrf_token %}
+      <input type="hidden" name="form_type" value="profile">
+      <div>
+        <label class="mb-2 block text-sm text-base-400">Usuario</label>
+        {{ profile_form.username }}
+        <p class="mt-1 text-xs text-love-200">{{ profile_form.username.errors|striptags }}</p>
+      </div>
+      <div>
+        <label class="mb-2 block text-sm text-base-400">Email</label>
+        {{ profile_form.email }}
+        <p class="mt-1 text-xs text-love-200">{{ profile_form.email.errors|striptags }}</p>
+      </div>
+      <button data-loading-text="Salvando perfil..." class="w-full rounded-2xl bg-love-400 px-5 py-3 text-sm font-semibold text-white">Salvar perfil</button>
+    </form>
+  </article>
+
+  <article class="wow animate__animated animate__fadeInUp rounded-3xl border border-base-300 bg-base-200 p-6 shadow-soft">
+    <h2 class="text-xl font-semibold text-love-100">Alterar senha</h2>
+    <form method="post" class="mt-5 space-y-4">
+      {% csrf_token %}
+      <input type="hidden" name="form_type" value="password">
+      <div>
+        <label class="mb-2 block text-sm text-base-400">Senha atual</label>
+        {{ password_form.old_password }}
+        <p class="mt-1 text-xs text-love-200">{{ password_form.old_password.errors|striptags }}</p>
+      </div>
+      <div>
+        <label class="mb-2 block text-sm text-base-400">Nova senha</label>
+        {{ password_form.new_password1 }}
+        <p class="mt-1 text-xs text-love-200">{{ password_form.new_password1.errors|striptags }}</p>
+      </div>
+      <div>
+        <label class="mb-2 block text-sm text-base-400">Confirmar nova senha</label>
+        {{ password_form.new_password2 }}
+        <p class="mt-1 text-xs text-love-200">{{ password_form.new_password2.errors|striptags }}</p>
+      </div>
+      <button data-loading-text="Alterando senha..." class="w-full rounded-2xl border border-love-200 px-5 py-3 text-sm text-love-100">Alterar senha</button>
+    </form>
+  </article>
+</section>
+{% endblock %}

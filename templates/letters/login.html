@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block title %}Entrar | Cartas de Amor{% endblock %}
+{% block content %}
+<section class="mx-auto max-w-md animate__animated animate__fadeInUp rounded-3xl border border-base-300 bg-base-200 p-6 shadow-soft">
+  <h1 class="text-2xl font-semibold text-love-100">Entrar na conta</h1>
+  <p class="mt-2 text-sm text-base-400">Acesse seu historico de cartas e continue criando.</p>
+  <form method="post" class="mt-5 space-y-4">
+    {% csrf_token %}
+    <div>
+      <label class="mb-2 block text-sm text-base-400">Usuario</label>
+      {{ form.username }}
+    </div>
+    <div>
+      <label class="mb-2 block text-sm text-base-400">Senha</label>
+      {{ form.password }}
+      <p class="mt-1 text-xs text-love-200">{{ form.non_field_errors|striptags }}</p>
+      <button
+        type="button"
+        data-open-modal="reset-password-modal"
+        class="mt-2 inline-block text-xs text-love-100 hover:text-love-200"
+      >
+        Esqueci minha senha
+      </button>
+    </div>
+    <button data-loading-text="Entrando..." class="w-full rounded-2xl bg-love-400 px-5 py-4 text-base font-semibold text-white">Entrar</button>
+  </form>
+  <p class="mt-4 text-center text-sm text-base-400">
+    Ainda nao tem conta?
+    <a href="{% url 'letters:signup' %}" class="text-love-100">Criar agora</a>
+  </p>
+</section>
+
+<div
+  id="reset-password-modal"
+  data-modal
+  class="fixed inset-0 z-[80] hidden items-end justify-center bg-black/60 p-4 sm:items-center"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="reset-modal-title"
+>
+  <div data-modal-backdrop class="absolute inset-0"></div>
+  <div data-modal-panel class="relative z-10 w-full max-w-md animate__animated animate__fadeInUp rounded-3xl border border-base-300 bg-base-200 p-6 shadow-soft">
+    <div class="flex items-start justify-between gap-3">
+      <div>
+        <h2 id="reset-modal-title" class="text-xl font-semibold text-love-100">Recuperar senha</h2>
+        <p class="mt-1 text-sm text-base-400">Digite seu email para receber o link de recuperacao.</p>
+      </div>
+      <button type="button" data-close-modal="reset-password-modal" class="rounded-lg border border-base-300 px-2 py-1 text-xs text-base-400">Fechar</button>
+    </div>
+
+    <form method="post" action="{% url 'letters:password_reset' %}" class="mt-5 space-y-4">
+      {% csrf_token %}
+      <div>
+        <label class="mb-2 block text-sm text-base-400">Email</label>
+        <input
+          type="email"
+          name="email"
+          required
+          class="w-full rounded-2xl border border-base-300 bg-base-200 px-4 py-3 text-base-500 placeholder-base-400 focus:border-love-300 focus:outline-none focus:ring-2 focus:ring-love-400/50"
+          placeholder="seu-email@exemplo.com"
+        >
+      </div>
+      <button data-modal-primary data-loading-text="Enviando..." class="w-full rounded-2xl bg-love-400 px-5 py-4 text-base font-semibold text-white">Enviar link</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

@@ -1,4 +1,6 @@
 from django import forms
+from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm, UserCreationForm
+from django.contrib.auth.models import User
 from PIL import Image
 
 from .models import LoveLetter
@@ -151,4 +153,50 @@ class UnlockForm(StyledFormMixin, forms.Form):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self._style_fields()
+
+
+class SignUpForm(StyledFormMixin, UserCreationForm):
+    email = forms.EmailField(required=False)
+
+    class Meta:
+        model = User
+        fields = ("username", "email", "password1", "password2")
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["username"].widget.attrs["placeholder"] = "Seu usuario"
+        self.fields["email"].widget.attrs["placeholder"] = "Seu email (opcional)"
+        self.fields["password1"].widget.attrs["placeholder"] = "Senha"
+        self.fields["password2"].widget.attrs["placeholder"] = "Confirmar senha"
+        self._style_fields()
+
+
+class LoginForm(StyledFormMixin, AuthenticationForm):
+    username = forms.CharField(widget=forms.TextInput(attrs={"placeholder": "Usuario"}))
+    password = forms.CharField(widget=forms.PasswordInput(attrs={"placeholder": "Senha"}))
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._style_fields()
+
+
+class ProfileForm(StyledFormMixin, forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ("username", "email")
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["username"].widget.attrs["placeholder"] = "Seu usuario"
+        self.fields["email"].widget.attrs["placeholder"] = "Seu email"
+        self._style_fields()
+
+
+class StyledPasswordChangeForm(StyledFormMixin, PasswordChangeForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["old_password"].widget.attrs["placeholder"] = "Senha atual"
+        self.fields["new_password1"].widget.attrs["placeholder"] = "Nova senha"
+        self.fields["new_password2"].widget.attrs["placeholder"] = "Confirmar nova senha"
         self._style_fields()

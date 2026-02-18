@@ -31,6 +31,87 @@ const hidePageLoading = () => {
 
 window.addEventListener("pageshow", hidePageLoading);
 
+const modalTriggerById = new Map();
+
+const openModal = (modalId) => {
+  const modal = document.getElementById(modalId);
+  if (!modal) return;
+  const panel = modal.querySelector("[data-modal-panel]");
+  modal.classList.remove("hidden");
+  modal.classList.add("flex");
+  if (panel) {
+    panel.classList.remove("animate__fadeOutDown");
+    panel.classList.add("animate__fadeInUp");
+  }
+  document.body.classList.add("overflow-hidden");
+  const primary = modal.querySelector("[data-modal-primary]");
+  if (primary) {
+    setTimeout(() => primary.focus(), 20);
+  }
+};
+
+const closeModal = (modalId) => {
+  const modal = document.getElementById(modalId);
+  if (!modal) return;
+  const panel = modal.querySelector("[data-modal-panel]");
+  if (panel) {
+    panel.classList.remove("animate__fadeInUp");
+    panel.classList.add("animate__fadeOutDown");
+  }
+  setTimeout(() => {
+    modal.classList.add("hidden");
+    modal.classList.remove("flex");
+    if (panel) {
+      panel.classList.remove("animate__fadeOutDown");
+      panel.classList.add("animate__fadeInUp");
+    }
+  }, 170);
+  document.body.classList.remove("overflow-hidden");
+  const trigger = modalTriggerById.get(modalId);
+  if (trigger && typeof trigger.focus === "function") {
+    setTimeout(() => trigger.focus(), 50);
+  }
+};
+
+document.querySelectorAll("[data-open-modal]").forEach((button) => {
+  button.addEventListener("click", () => {
+    const modalId = button.getAttribute("data-open-modal");
+    modalTriggerById.set(modalId, button);
+    const action = button.getAttribute("data-confirm-action");
+    if (modalId === "confirm-action-modal" && action) {
+      const form = document.getElementById("confirm-modal-form");
+      const title = document.getElementById("confirm-modal-title");
+      const text = document.getElementById("confirm-modal-text");
+      const submit = document.getElementById("confirm-modal-submit");
+      if (form) form.setAttribute("action", action);
+      if (title) title.textContent = button.getAttribute("data-confirm-title") || "Confirmar acao";
+      if (text) text.textContent = button.getAttribute("data-confirm-text") || "Deseja continuar?";
+      if (submit) submit.textContent = button.getAttribute("data-confirm-button") || "Confirmar";
+    }
+    openModal(modalId);
+  });
+});
+
+document.querySelectorAll("[data-close-modal]").forEach((button) => {
+  button.addEventListener("click", () => {
+    closeModal(button.getAttribute("data-close-modal"));
+  });
+});
+
+document.querySelectorAll("[data-modal]").forEach((modal) => {
+  const backdrop = modal.querySelector("[data-modal-backdrop]");
+  if (backdrop) {
+    backdrop.addEventListener("click", () => closeModal(modal.id));
+  }
+});
+
+document.addEventListener("keydown", (event) => {
+  if (event.key !== "Escape") return;
+  document.querySelectorAll("[data-modal]").forEach((modal) => {
+    if (!modal.classList.contains("hidden")) closeModal(modal.id);
+  });
+});
+
 document.querySelectorAll("a[href]").forEach((link) => {
   link.addEventListener("click", () => {
     const href = link.getAttribute("href") || "";
