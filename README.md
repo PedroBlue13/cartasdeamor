@@ -42,6 +42,44 @@ python manage.py migrate
 python manage.py runserver
 ```
 
+## Deploy na Render (pronto)
+Este repositório já inclui configuração para Render:
+- `render.yaml`
+- `build.sh`
+- suporte a `DATABASE_URL` (PostgreSQL)
+- Gunicorn + WhiteNoise para produção
+
+### Opção A: Blueprint (recomendado)
+1. Suba o código para GitHub.
+2. Na Render, clique em **New +** -> **Blueprint**.
+3. Selecione o repositório e confirme.
+4. A Render criará:
+   - Web Service (`cartas-de-amor`)
+   - Banco PostgreSQL (`cartas-de-amor-db`)
+
+### Opção B: Web Service manual
+1. Em `render.com/web/new`, conecte o repositório.
+2. Configure:
+   - Root Directory: `cartas_de_amor`
+   - Build Command: `bash build.sh`
+   - Start Command: `gunicorn config.wsgi:application`
+   - Health Check Path: `/health/`
+3. Crie um PostgreSQL na Render e adicione `DATABASE_URL` nas env vars.
+
+### Variáveis de ambiente mínimas (produção)
+- `SECRET_KEY`
+- `DEBUG=False`
+- `ALLOWED_HOSTS=seu-app.onrender.com`
+- `DATABASE_URL` (PostgreSQL da Render)
+- `SECURE_SSL_REDIRECT=True`
+- `SESSION_COOKIE_SECURE=True`
+- `CSRF_COOKIE_SECURE=True`
+
+### Uploads de fotos em produção
+Atualmente as fotos vão para `media/`. Em produção, o ideal é:
+- usar **Persistent Disk** na Render, ou
+- mover para storage externo (S3/Cloudinary).
+
 ## Tailwind
 O projeto já funciona com Tailwind via CDN e também inclui pipeline de build local.
 

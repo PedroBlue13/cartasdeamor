@@ -5,3 +5,7 @@ mercadopago>=2.2.3
 stripe>=11.0.0
 python-decouple>=3.8
 django-cleanup>=8.1.0
+gunicorn>=23.0.0
+whitenoise>=6.8.2
+dj-database-url>=2.3.0
+psycopg[binary]>=3.2.3
