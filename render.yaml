@@ -23,6 +23,8 @@ services:
           property: connectionString
       - key: MEDIA_ROOT
         value: /var/data/media
+      - key: SERVE_MEDIA_FILES
+        value: "True"
       - key: SECURE_SSL_REDIRECT
         value: "True"
       - key: SESSION_COOKIE_SECURE
