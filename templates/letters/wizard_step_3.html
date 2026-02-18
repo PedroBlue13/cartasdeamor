@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Etapa 3 | Cartas de Amor{% endblock %}
+{% block content %}
+{% include "letters/_wizard_progress.html" %}
+<section class="animate__animated animate__fadeInUp rounded-3xl border border-base-300 bg-base-200 p-5 shadow-soft">
+  <h2 class="text-2xl font-semibold text-love-100">Escreva sua mensagem</h2>
+  <p class="mt-2 text-sm text-base-400">Fale com o coração. Essa parte é obrigatória.</p>
+  <form method="post" class="mt-5 space-y-4">
+    {% csrf_token %}
+    <div>
+      <label class="mb-2 block text-sm text-base-400">Mensagem</label>
+      {{ form.message }}
+      <div class="mt-1 flex justify-between">
+        <p class="text-xs text-love-200">{{ form.message.errors|striptags }}</p>
+        <p class="text-xs text-base-400"><span id="char-count">0</span>/2000</p>
+      </div>
+    </div>
+    <div>
+      <label class="mb-2 block text-sm text-base-400">Tom da carta</label>
+      {{ form.tone }}
+    </div>
+    <div class="flex gap-3">
+      <a href="{% url 'letters:create_step' step=2 %}" class="w-1/3 rounded-2xl border border-base-300 px-4 py-4 text-center text-sm">Voltar</a>
+      <button data-loading-text="Salvando..." class="w-2/3 rounded-2xl bg-love-400 px-5 py-4 text-base font-semibold text-white">Continuar</button>
+    </div>
+  </form>
+</section>
+{% endblock %}

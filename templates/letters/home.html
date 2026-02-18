@@ -1,0 +1,252 @@
+{% extends "base.html" %}
+{% block title %}Cartas de Amor | Crie uma carta digital com fotos, musica e QR Code{% endblock %}
+{% block main_class %}mx-auto w-full max-w-6xl px-4 pb-20 pt-0 sm:px-6{% endblock %}
+{% block content %}
+<header class="sticky top-0 z-50 -mx-4 border-b border-white/5 bg-base-100/80 px-4 py-3 backdrop-blur sm:-mx-6 sm:px-6">
+  <div class="mx-auto flex max-w-6xl items-center justify-between">
+    <div class="flex items-center gap-3">
+      <div class="grid h-10 w-10 place-items-center rounded-xl border border-love-200/30 bg-love-400/20 text-love-100">♥</div>
+      <div>
+        <p class="text-sm font-semibold text-white/85">Cartas de Amor</p>
+        <p class="text-xs text-white/50">digital • fotos • musica • QR Code</p>
+      </div>
+    </div>
+    <nav class="hidden items-center gap-5 text-sm text-white/70 md:flex">
+      <a href="#como-funciona" class="hover:text-white">Como funciona</a>
+      <a href="#recursos" class="hover:text-white">Recursos</a>
+      <a href="#faq" class="hover:text-white">FAQ</a>
+    </nav>
+    <a href="{% url 'letters:create_step' step=1 %}" class="rounded-xl bg-love-400 px-4 py-2 text-sm font-semibold text-white transition hover:bg-love-500">
+      Criar agora
+    </a>
+  </div>
+</header>
+
+<section class="py-10 sm:py-16">
+  <div class="grid items-center gap-10 lg:grid-cols-2">
+    <div class="wow animate__animated animate__fadeInDown">
+      <p class="inline-flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-white/60">
+        <span class="h-2 w-2 rounded-full bg-love-300"></span>
+        Uma experiencia digital inesquecivel
+      </p>
+      <h1 class="mt-4 text-3xl font-extrabold leading-tight text-white sm:text-5xl">
+        Crie <span class="text-love-100">cartas digitais</span><br>
+        com fotos, musica e <span class="text-love-200">QR Code</span>
+      </h1>
+      <p class="mt-4 max-w-xl text-base text-white/70 sm:text-lg">
+        Personalize cada detalhe e compartilhe com um link unico, seguro e feito para emocionar.
+      </p>
+      <div class="mt-6 flex flex-col gap-3 sm:flex-row">
+        <a href="{% url 'letters:create_step' step=1 %}" class="rounded-2xl bg-love-400 px-5 py-3 text-center font-semibold text-white transition hover:bg-love-500">
+          Comecar agora
+        </a>
+        <a href="#preview" class="rounded-2xl border border-white/20 px-5 py-3 text-center font-semibold text-white/90 transition hover:border-love-200/50 hover:bg-base-200/30">
+          Ver preview
+        </a>
+      </div>
+      <div class="marquee mt-8">
+        <div class="marquee-track" id="chipsTrack"></div>
+      </div>
+    </div>
+
+    <div class="wow animate__animated animate__fadeInUp">
+      <article class="glass rounded-3xl p-5 sm:p-7">
+        <div class="flex items-center justify-between">
+          <p class="text-sm text-white/70">Preview da carta</p>
+          <span class="rounded-full border border-love-200/30 bg-love-400/20 px-3 py-1 text-xs text-love-100">ao vivo</span>
+        </div>
+        <div id="preview" class="mt-5 rounded-2xl border border-white/10 bg-base-200/40 p-5">
+          <p class="text-xs text-white/50">Para: <span class="font-semibold text-white/80">Seu amor</span></p>
+          <h2 class="mt-2 text-xl font-bold text-love-100">"Eu queria te dizer..."</h2>
+          <p class="mt-3 text-white/70">Que voce virou meu lugar favorito. Uma carta pequena, com sentimento gigante.</p>
+          <div class="mt-5 grid grid-cols-3 gap-2">
+            <div class="h-16 rounded-xl border border-white/10 bg-white/5"></div>
+            <div class="h-16 rounded-xl border border-white/10 bg-white/5"></div>
+            <div class="h-16 rounded-xl border border-white/10 bg-white/5"></div>
+          </div>
+          <div class="mt-5 flex items-center justify-between">
+            <p class="text-xs text-white/55">Musica: <span class="text-white/75">link detectado</span></p>
+            <div class="grid h-10 w-10 place-items-center rounded-xl border border-love-200/30 bg-love-400/20 text-sm text-love-100">QR</div>
+          </div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section id="como-funciona" class="py-12 sm:py-16">
+  <div class="wow animate__animated animate__fadeInUp">
+    <h2 class="text-2xl font-extrabold text-white sm:text-3xl">Como funciona</h2>
+    <p class="mt-2 text-white/70">Em poucos passos, sua carta fica pronta para emocionar.</p>
+  </div>
+  <div class="mt-8 grid gap-4 md:grid-cols-3">
+    <article class="glass wow animate__animated animate__fadeInUp rounded-3xl p-6">
+      <div class="grid h-11 w-11 place-items-center rounded-2xl border border-love-200/25 bg-love-400/20 text-love-100">1</div>
+      <h3 class="mt-4 text-lg font-bold text-white">Escreva e personalize</h3>
+      <p class="mt-2 text-white/70">Adicione mensagem, fotos e musica do jeito que voce sente.</p>
+    </article>
+    <article class="glass wow animate__animated animate__fadeInUp rounded-3xl p-6" data-wow-delay="0.08s">
+      <div class="grid h-11 w-11 place-items-center rounded-2xl border border-love-200/25 bg-love-400/20 text-love-100">2</div>
+      <h3 class="mt-4 text-lg font-bold text-white">Veja o preview completo</h3>
+      <p class="mt-2 text-white/70">Valide tudo exatamente como a pessoa amada vai receber.</p>
+    </article>
+    <article class="glass wow animate__animated animate__fadeInUp rounded-3xl p-6" data-wow-delay="0.16s">
+      <div class="grid h-11 w-11 place-items-center rounded-2xl border border-love-200/25 bg-love-400/20 text-love-100">3</div>
+      <h3 class="mt-4 text-lg font-bold text-white">Desbloqueie e compartilhe</h3>
+      <p class="mt-2 text-white/70">Pague R$ 3,99 e libere link unico, QR Code e WhatsApp.</p>
+    </article>
+  </div>
+</section>
+
+<section id="recursos" class="pb-12 sm:pb-16">
+  <div class="grid items-start gap-8 lg:grid-cols-2">
+    <div class="wow animate__animated animate__fadeInUp">
+      <h2 class="text-2xl font-extrabold text-white sm:text-3xl">Expresse seu amor digitalmente</h2>
+      <p class="mt-3 leading-relaxed text-white/70">Texto, fotos, musica, senha opcional e compartilhamento elegante em uma experiencia mobile-first.</p>
+      <div class="mt-6 grid gap-3 sm:grid-cols-2">
+        <article class="glass rounded-2xl p-4">
+          <p class="text-sm font-semibold text-love-100">Galeria de fotos</p>
+          <p class="mt-1 text-xs text-white/60">Upload multiplo com preview instantaneo.</p>
+        </article>
+        <article class="glass rounded-2xl p-4">
+          <p class="text-sm font-semibold text-love-100">Musica detectada</p>
+          <p class="mt-1 text-xs text-white/60">YouTube, Spotify, Apple, Deezer e Amazon.</p>
+        </article>
+        <article class="glass rounded-2xl p-4">
+          <p class="text-sm font-semibold text-love-100">Senha opcional</p>
+          <p class="mt-1 text-xs text-white/60">So quem tem acesso pode ler a carta.</p>
+        </article>
+        <article class="glass rounded-2xl p-4">
+          <p class="text-sm font-semibold text-love-100">Link + QR Code</p>
+          <p class="mt-1 text-xs text-white/60">Perfeito para compartilhar com estilo.</p>
+        </article>
+      </div>
+    </div>
+    <aside class="glass wow animate__animated animate__fadeInUp rounded-3xl p-6">
+      <p class="text-sm text-white/70">Microcopy emocional</p>
+      <div class="mt-4 space-y-3">
+        <div class="rounded-2xl border border-white/10 bg-base-200/40 p-4 text-white/85">"Sua carta esta pronta. Falta so um passo para ela viver."</div>
+        <div class="rounded-2xl border border-white/10 bg-base-200/40 p-4 text-white/85">"E so um pequeno gesto para transformar palavras em eternidade."</div>
+        <div class="rounded-2xl border border-white/10 bg-base-200/40 p-4 text-white/85">"R$ 3,99 para eternizar o que voce sente."</div>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<section class="pb-12 sm:pb-16">
+  <div class="mb-6 flex items-end justify-between">
+    <div>
+      <h2 class="text-2xl font-extrabold text-white sm:text-3xl">Exemplos visuais</h2>
+      <p class="mt-2 text-white/70">Trechos de cartas ja criadas e compartilhadas.</p>
+    </div>
+  </div>
+  <div class="grid gap-4 md:grid-cols-3">
+    {% for item in examples %}
+      <article class="glass wow animate__animated animate__fadeInUp rounded-3xl p-5">
+        <p class="text-xs text-love-200">Para {{ item.beloved_name }}</p>
+        <p class="mt-3 font-serif text-2xl leading-snug text-love-100">{{ item.message|truncatechars:120 }}</p>
+      </article>
+    {% empty %}
+      <article class="glass wow animate__animated animate__fadeInUp rounded-3xl p-5 md:col-span-3">
+        <p class="text-sm text-white/70">A proxima historia inesquecivel pode ser a sua.</p>
+      </article>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="pb-12 sm:pb-16">
+  <div class="mb-8 flex items-end justify-between gap-4">
+    <div>
+      <h2 class="text-2xl font-extrabold text-white sm:text-3xl">Ocasiões que combinam</h2>
+      <p class="mt-2 text-white/70">Feita para qualquer momento que mereca um eu te amo.</p>
+    </div>
+    <a href="{% url 'letters:create_step' step=1 %}" class="hidden rounded-xl border border-white/20 px-4 py-2 text-sm font-semibold text-white/90 transition hover:border-love-200/60 sm:inline">
+      Criar minha carta
+    </a>
+  </div>
+  <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+    <article class="glass wow animate__animated animate__fadeInUp rounded-3xl p-5">
+      <p class="text-sm font-semibold text-love-100">Dia dos Namorados</p>
+      <p class="mt-2 text-xs text-white/60">A carta perfeita para um momento inesquecivel.</p>
+    </article>
+    <article class="glass wow animate__animated animate__fadeInUp rounded-3xl p-5" data-wow-delay="0.05s">
+      <p class="text-sm font-semibold text-love-100">Aniversario de namoro</p>
+      <p class="mt-2 text-xs text-white/60">Celebre cada capitulo da historia de voces.</p>
+    </article>
+    <article class="glass wow animate__animated animate__fadeInUp rounded-3xl p-5" data-wow-delay="0.10s">
+      <p class="text-sm font-semibold text-love-100">Pedido de desculpas</p>
+      <p class="mt-2 text-xs text-white/60">Palavras certas podem reconstruir pontes.</p>
+    </article>
+    <article class="glass wow animate__animated animate__fadeInUp rounded-3xl p-5" data-wow-delay="0.15s">
+      <p class="text-sm font-semibold text-love-100">Surpresa romantica</p>
+      <p class="mt-2 text-xs text-white/60">Um gesto simples para marcar para sempre.</p>
+    </article>
+  </div>
+</section>
+
+<section id="cta" class="pb-14">
+  <div class="glass wow animate__animated animate__fadeInUp rounded-[2rem] border border-love-200/20 p-7 sm:p-10">
+    <div class="grid items-center gap-8 lg:grid-cols-2">
+      <div>
+        <h2 class="text-2xl font-extrabold text-white sm:text-3xl">Crie sua carta agora</h2>
+        <p class="mt-3 leading-relaxed text-white/70">Personalize, veja o preview e desbloqueie para compartilhar com link unico e QR Code.</p>
+        <div class="mt-6 flex flex-col gap-3 sm:flex-row">
+          <a href="{% url 'letters:create_step' step=1 %}" class="rounded-2xl bg-love-400 px-5 py-3 text-center font-semibold text-white transition hover:bg-love-500">
+            Ir para o criador
+          </a>
+          <a href="#faq" class="rounded-2xl border border-white/20 px-5 py-3 text-center font-semibold text-white/90 transition hover:border-love-200/60">
+            Tirar duvidas
+          </a>
+        </div>
+      </div>
+      <div class="rounded-3xl border border-white/10 bg-base-200/35 p-6 text-sm text-white/75">
+        <p class="font-semibold text-white/90">Fluxo do produto</p>
+        <ul class="mt-4 space-y-2">
+          <li>• Wizard completo em 6 etapas</li>
+          <li>• Preview antes do pagamento</li>
+          <li>• Pix, Mercado Pago e Stripe</li>
+          <li>• Senha opcional e compartilhamento</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="faq" class="pb-16">
+  <div class="wow animate__animated animate__fadeInUp">
+    <h2 class="text-2xl font-extrabold text-white sm:text-3xl">FAQ</h2>
+    <p class="mt-2 text-white/70">Respostas rapidas antes de voce criar a sua.</p>
+  </div>
+  <div class="mt-8 grid gap-4 md:grid-cols-2">
+    <article class="glass wow animate__animated animate__fadeInUp rounded-3xl p-6">
+      <h3 class="font-bold text-white">Funciona no celular?</h3>
+      <p class="mt-2 text-sm text-white/70">Sim. O layout foi pensado primeiro para mobile.</p>
+    </article>
+    <article class="glass wow animate__animated animate__fadeInUp rounded-3xl p-6" data-wow-delay="0.06s">
+      <h3 class="font-bold text-white">Posso colocar senha?</h3>
+      <p class="mt-2 text-sm text-white/70">Sim. A senha e opcional e protege a carta.</p>
+    </article>
+    <article class="glass wow animate__animated animate__fadeInUp rounded-3xl p-6" data-wow-delay="0.12s">
+      <h3 class="font-bold text-white">Aceita Spotify e YouTube?</h3>
+      <p class="mt-2 text-sm text-white/70">Sim. O sistema detecta o provedor automaticamente.</p>
+    </article>
+    <article class="glass wow animate__animated animate__fadeInUp rounded-3xl p-6" data-wow-delay="0.18s">
+      <h3 class="font-bold text-white">Como compartilho?</h3>
+      <p class="mt-2 text-sm text-white/70">Com link unico, QR Code para download e WhatsApp.</p>
+    </article>
+  </div>
+</section>
+
+<footer class="-mx-4 border-t border-white/5 bg-base-100/60 px-4 py-10 sm:-mx-6 sm:px-6">
+  <div class="mx-auto grid max-w-6xl gap-6 text-xs text-white/50 sm:grid-cols-2">
+    <div>
+      <p class="text-sm font-semibold text-white/80">Cartas de Amor</p>
+      <p class="mt-2">Feito para transformar sentimentos em uma experiencia digital memoravel.</p>
+    </div>
+    <div class="sm:text-right">
+      <p>© 2026 — Todos os direitos reservados</p>
+      <p class="mt-2">Politica • Termos • Contato</p>
+    </div>
+  </div>
+</footer>
+{% endblock %}

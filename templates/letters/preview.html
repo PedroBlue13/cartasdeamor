@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Preview | Cartas de Amor{% endblock %}
+{% block content %}
+<section class="animate__animated animate__fadeInUp rounded-3xl border border-base-300 bg-base-200 p-5 shadow-soft">
+  <p class="text-sm text-love-200">Visual final da carta</p>
+  <h1 class="mt-2 text-2xl font-semibold text-love-100">Para {{ letter.beloved_name }}</h1>
+  <div class="mt-4 rounded-2xl bg-base-100 p-4">
+    <p class="font-serif text-2xl text-love-100">{{ letter.message|linebreaksbr }}</p>
+  </div>
+  <p class="mt-4 text-sm text-base-400">Para compartilhar essa carta, é necessário desbloqueá-la 💖</p>
+  <a href="{% url 'letters:payment' letter_id=letter.id %}" class="mt-5 inline-flex w-full justify-center rounded-2xl bg-love-400 px-5 py-4 text-base font-semibold text-white">Continuar para pagamento</a>
+</section>
+{% endblock %}

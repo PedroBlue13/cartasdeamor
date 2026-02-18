@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block title %}Carta para {{ letter.beloved_name }}{% endblock %}
+{% block content %}
+<section class="animate__animated animate__fadeIn space-y-5">
+  <article class="rounded-3xl border border-base-300 bg-base-200 p-6 shadow-soft">
+    <p class="text-sm text-love-200">Uma carta para voce, {{ letter.beloved_name }}</p>
+    <div class="mt-4 rounded-2xl bg-base-100 p-5">
+      <p class="font-serif text-3xl leading-relaxed text-love-100">{{ letter.message|linebreaksbr }}</p>
+    </div>
+    {% if letter.sender_name %}
+      <p class="mt-4 text-right text-sm text-base-400">Com amor, {{ letter.sender_name }}</p>
+    {% endif %}
+  </article>
+
+  {% if letter.photos.exists %}
+    <article class="wow animate__animated animate__fadeInUp rounded-3xl border border-base-300 bg-base-200 p-5 shadow-soft">
+      <div class="grid grid-cols-2 gap-3">
+        {% for photo in letter.photos.all %}
+          <img src="{{ photo.image.url }}" alt="Memoria" class="h-36 w-full rounded-2xl object-cover">
+        {% endfor %}
+      </div>
+    </article>
+  {% endif %}
+
+  {% if music_embed %}
+    <article class="wow animate__animated animate__fadeInUp overflow-hidden rounded-3xl border border-base-300 bg-base-200 p-2 shadow-soft">
+      <iframe id="music-player-frame" src="{{ music_embed }}" class="h-44 w-full rounded-2xl" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>
+      {% if letter.music_provider == "spotify" %}
+        <div class="px-3 pb-2 pt-3 text-xs text-base-400">
+          O Spotify pode exigir toque para iniciar.
+          <a id="spotify-play-link" href="{{ letter.music_url }}" target="_blank" rel="noopener" class="ml-1 font-semibold text-love-100">Tocar agora</a>
+        </div>
+      {% endif %}
+    </article>
+  {% elif letter.music_url %}
+    <a id="spotify-play-link" href="{{ letter.music_url }}" target="_blank" rel="noopener" class="inline-flex rounded-xl border border-love-200 px-4 py-3 text-sm text-love-100">Ouvir agora</a>
+  {% endif %}
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  (function () {
+    const isSpotify = "{{ letter.music_provider }}" === "spotify";
+    const autoPlay = "{{ auto_play|yesno:'1,0' }}" === "1";
+    const deepLink = "{{ spotify_deep_link }}";
+    if (!isSpotify || !autoPlay || !deepLink) return;
+
+    const alreadyTriedKey = "spotify_autoplay_attempt_{{ letter.id }}";
+    if (sessionStorage.getItem(alreadyTriedKey)) return;
+    sessionStorage.setItem(alreadyTriedKey, "1");
+
+    const iframe = document.createElement("iframe");
+    iframe.style.display = "none";
+    iframe.src = deepLink;
+    document.body.appendChild(iframe);
+    setTimeout(() => iframe.remove(), 1200);
+  })();
+</script>
+{% endblock %}

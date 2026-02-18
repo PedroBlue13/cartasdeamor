@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}Etapa 6 | Cartas de Amor{% endblock %}
+{% block content %}
+{% include "letters/_wizard_progress.html" %}
+<section class="space-y-5">
+  <article class="animate__animated animate__fadeIn rounded-3xl border border-base-300 bg-base-200 p-5 shadow-soft">
+    <p class="text-sm text-love-200">Preview final</p>
+    <h2 class="mt-2 text-2xl font-semibold text-love-100">Para {{ letter.beloved_name }}</h2>
+    <p class="mt-2 text-sm text-base-400">“Para compartilhar essa carta, é necessário desbloqueá-la 💖”</p>
+    <div class="mt-5 rounded-2xl bg-base-100 p-4">
+      <p class="font-serif text-2xl leading-relaxed text-love-100">{{ letter.message|linebreaksbr }}</p>
+      {% if letter.sender_name %}<p class="mt-4 text-sm text-base-400">Com amor, {{ letter.sender_name }}</p>{% endif %}
+    </div>
+    {% if letter.photos.exists %}
+      <div class="mt-4 grid grid-cols-2 gap-3">
+        {% for photo in letter.photos.all %}
+          <img src="{{ photo.image.url }}" class="h-36 w-full rounded-2xl object-cover" alt="Foto da carta">
+        {% endfor %}
+      </div>
+    {% endif %}
+    {% if music_embed %}
+      <div class="mt-5 overflow-hidden rounded-2xl">
+        <iframe src="{{ music_embed }}" class="h-44 w-full" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>
+      </div>
+    {% elif letter.music_url %}
+      <a href="{{ letter.music_url }}" target="_blank" rel="noopener" class="mt-4 inline-flex rounded-xl border border-love-200 px-4 py-2 text-sm text-love-100">Ouvir agora</a>
+    {% endif %}
+  </article>
+
+  <article class="wow animate__animated animate__fadeInUp rounded-3xl border border-base-300 bg-base-200 p-5 shadow-soft">
+    <h3 class="text-lg font-semibold text-love-100">Privacidade da carta</h3>
+    <p class="mt-1 text-sm text-base-400">Opcional: proteja com senha antes de compartilhar.</p>
+    <form method="post" class="mt-4 space-y-3">
+      {% csrf_token %}
+      {{ password_form.password }}
+      <button data-loading-text="Protegendo..." class="w-full rounded-2xl border border-love-200 px-5 py-3 text-sm text-love-100">Salvar privacidade</button>
+    </form>
+  </article>
+
+  <div class="flex gap-3">
+    <a href="{% url 'letters:create_step' step=5 %}" class="w-1/3 rounded-2xl border border-base-300 px-4 py-4 text-center text-sm">Voltar</a>
+    <a href="{% url 'letters:payment' letter_id=letter.id %}" class="w-2/3 rounded-2xl bg-love-400 px-5 py-4 text-center text-base font-semibold text-white">Ir para pagamento</a>
+  </div>
+</section>
+{% endblock %}

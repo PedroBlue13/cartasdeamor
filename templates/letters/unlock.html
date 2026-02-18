@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Desbloquear carta{% endblock %}
+{% block content %}
+<section class="animate__animated animate__fadeInUp mx-auto max-w-md rounded-3xl border border-base-300 bg-base-200 p-6 shadow-soft">
+  <p class="text-sm text-love-200">Carta protegida</p>
+  <h1 class="mt-2 text-2xl font-semibold text-love-100">Só quem tem a senha pode ler</h1>
+  <p class="mt-2 text-sm text-base-400">Digite a senha para desbloquear este momento especial.</p>
+  <form method="post" class="mt-5 space-y-3">
+    {% csrf_token %}
+    {{ form.password }}
+    <p class="text-xs text-love-200">{{ form.password.errors|striptags }}</p>
+    <button data-loading-text="Validando senha..." class="w-full rounded-2xl bg-love-400 px-5 py-4 text-base font-semibold text-white">Desbloquear</button>
+  </form>
+</section>
+{% endblock %}

@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block title %}Pagamento | Cartas de Amor{% endblock %}
+{% block content %}
+<section class="space-y-5">
+  <article class="animate__animated animate__fadeIn rounded-3xl border border-base-300 bg-base-100 p-5 shadow-soft">
+    <p class="text-sm text-love-200">Sua carta esta pronta</p>
+    <h1 class="mt-2 text-3xl font-bold text-love-300">R$ {{ letter.price }}</h1>
+    <p class="mt-3 text-sm text-base-400">E so um pequeno gesto para transformar palavras em eternidade.</p>
+    <p class="text-sm text-base-400">Sua carta esta pronta. Falta so um passo para ela viver.</p>
+    <p class="text-sm text-base-400">R$ 3,99 para eternizar o que voce sente.</p>
+    <p class="text-sm text-base-400">Depois disso, ela sera so de voces.</p>
+  </article>
+
+  <article class="wow animate__animated animate__fadeInUp rounded-3xl border border-base-300 bg-base-200 p-5 shadow-soft">
+    <h2 class="text-lg font-semibold text-love-100">PIX automatico</h2>
+    <img src="{{ pix_qr_base64 }}" alt="QR PIX" class="mx-auto mt-4 h-52 w-52 rounded-2xl bg-white p-3">
+    <p class="mt-3 text-xs text-base-400">Chave PIX: 11948587422 (telefone)</p>
+    <textarea readonly id="pix-code" class="mt-2 h-20 w-full rounded-2xl border border-base-300 bg-base-100 p-3 text-xs text-base-500">{{ pix_payload }}</textarea>
+    <div class="mt-3 grid grid-cols-2 gap-3">
+      <button type="button" data-copy-target="pix-code" class="rounded-2xl border border-love-200 px-4 py-3 text-sm text-love-100">Copiar codigo PIX</button>
+      <form method="post" action="{% url 'letters:simulate_payment' letter_id=letter.id method='pix' %}">
+        {% csrf_token %}
+        <button data-loading-text="Confirmando PIX..." class="w-full rounded-2xl bg-love-400 px-4 py-3 text-sm font-semibold text-white">Confirmar PIX (simulacao)</button>
+      </form>
+    </div>
+  </article>
+
+  <article class="wow animate__animated animate__fadeInUp rounded-3xl border border-base-300 bg-base-200 p-5 shadow-soft" data-wow-delay="0.1s">
+    <h2 class="text-lg font-semibold text-love-100">Outras formas</h2>
+    <div class="mt-3 grid grid-cols-2 gap-3">
+      <form method="post">
+        {% csrf_token %}
+        <input type="hidden" name="method" value="mercado_pago">
+        <button data-loading-text="Abrindo checkout..." class="w-full rounded-2xl border border-love-200 px-4 py-3 text-sm text-love-100">Mercado Pago</button>
+      </form>
+      <form method="post">
+        {% csrf_token %}
+        <input type="hidden" name="method" value="stripe">
+        <button data-loading-text="Abrindo checkout..." class="w-full rounded-2xl border border-love-200 px-4 py-3 text-sm text-love-100">Stripe (cartao)</button>
+      </form>
+    </div>
+  </article>
+
+  {% if letter.is_paid %}
+    <article class="animate__animated animate__fadeInUp rounded-3xl border border-love-300/40 bg-base-200 p-5 shadow-soft">
+      <h3 class="text-lg font-semibold text-love-100">Carta desbloqueada</h3>
+      <input readonly id="public-link" value="{{ public_link }}" class="mt-3 w-full rounded-2xl border border-base-300 bg-base-100 px-3 py-3 text-xs">
+      <div class="mt-3 grid grid-cols-1 gap-2">
+        <input type="email" placeholder="Email opcional para envio" class="w-full rounded-2xl border border-base-300 bg-base-100 px-3 py-3 text-xs">
+        <input type="tel" placeholder="Telefone opcional para envio" class="w-full rounded-2xl border border-base-300 bg-base-100 px-3 py-3 text-xs">
+      </div>
+      <div class="mt-3 grid grid-cols-3 gap-2">
+        <button type="button" data-copy-target="public-link" class="rounded-xl border border-love-200 px-3 py-2 text-xs text-love-100">Copiar link</button>
+        <a href="{% url 'letters:letter_qr' letter_id=letter.id %}" class="rounded-xl border border-love-200 px-3 py-2 text-center text-xs text-love-100">Baixar QR</a>
+        <a href="https://wa.me/?text=Olha%20essa%20carta%20que%20fiz%20pra%20voce:%20{{ public_link|urlencode }}" target="_blank" rel="noopener" class="rounded-xl bg-love-400 px-3 py-2 text-center text-xs font-semibold text-white">WhatsApp</a>
+      </div>
+      <img src="{{ letter_qr }}" alt="QR carta" class="mx-auto mt-4 h-48 w-48 rounded-2xl bg-white p-3">
+    </article>
+  {% endif %}
+</section>
+{% endblock %}
