@@ -145,6 +145,22 @@ def delete_photo(request: HttpRequest, photo_id: int) -> HttpResponse:
     return redirect("letters:create_step", step=4)
 
 
+@require_POST
+def set_photo_mode(request: HttpRequest, photo_id: int, mode: str) -> HttpResponse:
+    if not request.user.is_authenticated:
+        raise Http404
+    if mode not in {"contain", "cover"}:
+        return HttpResponseForbidden("Modo invalido.")
+    photo = get_object_or_404(LovePhoto, id=photo_id, letter__user=request.user)
+    photo.display_mode = mode
+    photo.save(update_fields=["display_mode"])
+    messages.success(request, "Ajuste da foto atualizado.")
+    next_url = request.GET.get("next")
+    if next_url and url_has_allowed_host_and_scheme(next_url, allowed_hosts={request.get_host()}):
+        return redirect(next_url)
+    return redirect("letters:create_step", step=4)
+
+
 @require_http_methods(["GET", "POST"])
 def profile_view(request: HttpRequest) -> HttpResponse:
     if not request.user.is_authenticated:

@@ -16,7 +16,7 @@
     <article class="wow animate__animated animate__fadeInUp rounded-3xl border border-base-300 bg-base-200 p-5 shadow-soft">
       <div class="grid grid-cols-2 gap-3">
         {% for photo in letter.photos.all %}
-          <img src="{{ photo.image.url }}" alt="Memoria" class="h-36 w-full rounded-2xl object-cover">
+          <img src="{{ photo.image.url }}" alt="Memoria" class="h-36 w-full rounded-2xl {% if photo.display_mode == 'cover' %}object-cover{% else %}object-contain bg-base-100{% endif %}">
         {% endfor %}
       </div>
     </article>

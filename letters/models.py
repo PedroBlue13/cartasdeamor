@@ -61,8 +61,14 @@ class LoveLetter(models.Model):
 
 
 class LovePhoto(models.Model):
+    DISPLAY_MODE_CHOICES = [
+        ("contain", "Ajustar"),
+        ("cover", "Preencher"),
+    ]
+
     letter = models.ForeignKey(LoveLetter, on_delete=models.CASCADE, related_name="photos")
     image = models.ImageField(upload_to="letters/photos/")
+    display_mode = models.CharField(max_length=10, choices=DISPLAY_MODE_CHOICES, default="contain")
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:

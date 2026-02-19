@@ -17,7 +17,17 @@
     <div class="grid grid-cols-2 gap-3">
       {% for photo in photos %}
         <div class="relative overflow-hidden rounded-2xl">
-          <img src="{{ photo.image.url }}" alt="Foto" class="h-36 w-full rounded-2xl object-cover">
+          <img src="{{ photo.image.url }}" alt="Foto" class="h-36 w-full rounded-2xl {% if photo.display_mode == 'cover' %}object-cover{% else %}object-contain bg-base-100{% endif %}">
+          <div class="absolute left-2 top-2 flex gap-1">
+            <form method="post" action="{% url 'letters:set_photo_mode' photo_id=photo.id mode='contain' %}?next={{ request.path|urlencode }}">
+              {% csrf_token %}
+              <button class="rounded-lg bg-base-100/85 px-2 py-1 text-[10px] text-love-300 {% if photo.display_mode == 'contain' %}ring-1 ring-love-300{% endif %}">Ajustar</button>
+            </form>
+            <form method="post" action="{% url 'letters:set_photo_mode' photo_id=photo.id mode='cover' %}?next={{ request.path|urlencode }}">
+              {% csrf_token %}
+              <button class="rounded-lg bg-base-100/85 px-2 py-1 text-[10px] text-love-300 {% if photo.display_mode == 'cover' %}ring-1 ring-love-300{% endif %}">Preencher</button>
+            </form>
+          </div>
           <button
             type="button"
             data-open-modal="confirm-action-modal"

@@ -14,7 +14,7 @@
     {% if letter.photos.exists %}
       <div class="mt-4 grid grid-cols-2 gap-3">
         {% for photo in letter.photos.all %}
-          <img src="{{ photo.image.url }}" class="h-36 w-full rounded-2xl object-cover" alt="Foto da carta">
+          <img src="{{ photo.image.url }}" class="h-36 w-full rounded-2xl {% if photo.display_mode == 'cover' %}object-cover{% else %}object-contain bg-base-100{% endif %}" alt="Foto da carta">
         {% endfor %}
       </div>
     {% endif %}
