@@ -124,6 +124,47 @@ def history(request: HttpRequest) -> HttpResponse:
     return render(request, "letters/history.html", {"letters": letters})
 
 
+@require_http_methods(["GET", "POST"])
+def edit_letter(request: HttpRequest, letter_id: str) -> HttpResponse:
+    letter = _owner_required(request, letter_id)
+
+    message_form = Step3Form(request.POST or None, instance=letter, prefix="message")
+    music_form = Step5Form(request.POST or None, instance=letter, prefix="music")
+    photos_form = PhotoUploadForm(request.POST or None, request.FILES or None)
+
+    if request.method == "POST":
+        form_type = request.POST.get("form_type")
+        if form_type == "message" and message_form.is_valid():
+            message_form.save()
+            messages.success(request, "Mensagem atualizada.")
+            return redirect("letters:edit_letter", letter_id=str(letter.id))
+        if form_type == "music" and music_form.is_valid():
+            letter = music_form.save(commit=False)
+            letter.music_provider = detect_music_provider(letter.music_url)
+            letter.save(update_fields=["music_url", "music_provider", "updated_at"])
+            messages.success(request, "Musica atualizada.")
+            return redirect("letters:edit_letter", letter_id=str(letter.id))
+        if form_type == "photos" and photos_form.is_valid():
+            files = photos_form.cleaned_data["photos"]
+            for image in files:
+                LovePhoto.objects.create(letter=letter, image=image)
+            if files:
+                messages.success(request, f"{len(files)} foto(s) adicionada(s).")
+            return redirect("letters:edit_letter", letter_id=str(letter.id))
+
+    return render(
+        request,
+        "letters/edit_letter.html",
+        {
+            "letter": letter,
+            "message_form": message_form,
+            "music_form": music_form,
+            "photos_form": photos_form,
+            "music_embed": music_embed_url(letter.music_url, letter.music_provider),
+        },
+    )
+
+
 @require_POST
 def delete_letter(request: HttpRequest, letter_id: str) -> HttpResponse:
     letter = _owner_required(request, letter_id)

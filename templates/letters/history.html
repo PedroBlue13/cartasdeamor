@@ -24,6 +24,7 @@
           </span>
         </div>
         <div class="mt-4 flex flex-wrap gap-2">
+          <a href="{% url 'letters:edit_letter' letter_id=letter.id %}" class="rounded-xl border border-love-200 px-3 py-2 text-xs text-love-100">Editar</a>
           <a href="{% url 'letters:preview' letter_id=letter.id %}" class="rounded-xl border border-love-200 px-3 py-2 text-xs text-love-100">Preview</a>
           <a href="{% url 'letters:payment' letter_id=letter.id %}" class="rounded-xl border border-love-200 px-3 py-2 text-xs text-love-100">Pagamento</a>
           {% if letter.is_paid %}

@@ -42,6 +42,7 @@ urlpatterns = [
         name="password_reset_complete",
     ),
     path("minhas-cartas/", views.history, name="history"),
+    path("minhas-cartas/<uuid:letter_id>/editar/", views.edit_letter, name="edit_letter"),
     path("minhas-cartas/<uuid:letter_id>/excluir/", views.delete_letter, name="delete_letter"),
     path("fotos/<int:photo_id>/excluir/", views.delete_photo, name="delete_photo"),
     path("fotos/<int:photo_id>/modo/<str:mode>/", views.set_photo_mode, name="set_photo_mode"),

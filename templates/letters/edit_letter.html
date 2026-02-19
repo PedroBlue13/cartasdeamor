@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% block title %}Editar carta | Cartas de Amor{% endblock %}
+{% block content %}
+<section class="space-y-5">
+  <div class="animate__animated animate__fadeInDown flex items-center justify-between">
+    <div>
+      <h1 class="text-2xl font-semibold text-love-100">Editar carta</h1>
+      <p class="mt-1 text-sm text-base-400">Ajuste texto, musica e fotos da sua carta.</p>
+    </div>
+    <a href="{% url 'letters:history' %}" class="rounded-xl border border-base-300 px-4 py-2 text-sm">Voltar</a>
+  </div>
+
+  <article class="animate__animated animate__fadeInUp rounded-3xl border border-base-300 bg-base-200 p-5 shadow-soft">
+    <h2 class="text-lg font-semibold text-love-100">Mensagem</h2>
+    <form method="post" class="mt-4 space-y-4">
+      {% csrf_token %}
+      <input type="hidden" name="form_type" value="message">
+      <div>
+        <label class="mb-2 block text-sm text-base-400">Texto da carta</label>
+        {{ message_form.message }}
+        <p class="mt-1 text-xs text-love-200">{{ message_form.message.errors|striptags }}</p>
+      </div>
+      <div>
+        <label class="mb-2 block text-sm text-base-400">Tom</label>
+        {{ message_form.tone }}
+      </div>
+      <button data-loading-text="Salvando mensagem..." class="w-full rounded-2xl bg-love-400 px-5 py-3 text-sm font-semibold text-white">Salvar mensagem</button>
+    </form>
+  </article>
+
+  <article class="wow animate__animated animate__fadeInUp rounded-3xl border border-base-300 bg-base-200 p-5 shadow-soft">
+    <h2 class="text-lg font-semibold text-love-100">Musica</h2>
+    <form method="post" class="mt-4 space-y-4">
+      {% csrf_token %}
+      <input type="hidden" name="form_type" value="music">
+      <div>
+        <label class="mb-2 block text-sm text-base-400">URL da musica</label>
+        {{ music_form.music_url }}
+        <p class="mt-1 text-xs text-love-200">{{ music_form.music_url.errors|striptags }}</p>
+      </div>
+      <button data-loading-text="Salvando musica..." class="w-full rounded-2xl border border-love-200 px-5 py-3 text-sm text-love-100">Salvar musica</button>
+    </form>
+    {% if music_embed %}
+      <div class="mt-4 overflow-hidden rounded-2xl">
+        <iframe src="{{ music_embed }}" class="h-44 w-full" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>
+      </div>
+    {% endif %}
+  </article>
+
+  <article class="wow animate__animated animate__fadeInUp rounded-3xl border border-base-300 bg-base-200 p-5 shadow-soft">
+    <h2 class="text-lg font-semibold text-love-100">Fotos e modo de exibicao</h2>
+    <form method="post" enctype="multipart/form-data" class="mt-4 space-y-4">
+      {% csrf_token %}
+      <input type="hidden" name="form_type" value="photos">
+      <div>
+        <label class="mb-2 block text-sm text-base-400">Adicionar novas fotos</label>
+        {{ photos_form.photos }}
+        <p class="mt-1 text-xs text-love-200">{{ photos_form.photos.errors|striptags }}</p>
+      </div>
+      <button data-loading-text="Enviando fotos..." class="w-full rounded-2xl border border-love-200 px-5 py-3 text-sm text-love-100">Adicionar fotos</button>
+    </form>
+
+    <div class="mt-4 grid grid-cols-2 gap-3">
+      {% for photo in letter.photos.all %}
+        <div class="relative overflow-hidden rounded-2xl">
+          <img src="{{ photo.image.url }}" alt="Foto" class="h-36 w-full rounded-2xl {% if photo.display_mode == 'cover' %}object-cover{% else %}object-contain bg-base-100{% endif %}">
+          <div class="absolute left-2 top-2 flex gap-1">
+            <form method="post" action="{% url 'letters:set_photo_mode' photo_id=photo.id mode='contain' %}?next={{ request.path|urlencode }}">
+              {% csrf_token %}
+              <button class="rounded-lg bg-base-100/85 px-2 py-1 text-[10px] text-love-300 {% if photo.display_mode == 'contain' %}ring-1 ring-love-300{% endif %}">Ajustar</button>
+            </form>
+            <form method="post" action="{% url 'letters:set_photo_mode' photo_id=photo.id mode='cover' %}?next={{ request.path|urlencode }}">
+              {% csrf_token %}
+              <button class="rounded-lg bg-base-100/85 px-2 py-1 text-[10px] text-love-300 {% if photo.display_mode == 'cover' %}ring-1 ring-love-300{% endif %}">Preencher</button>
+            </form>
+          </div>
+          <button
+            type="button"
+            data-open-modal="confirm-action-modal"
+            data-confirm-action="{% url 'letters:delete_photo' photo_id=photo.id %}?next={{ request.path|urlencode }}"
+            data-confirm-title="Remover foto?"
+            data-confirm-text="Essa foto sera removida da carta."
+            data-confirm-button="Remover foto"
+            class="absolute bottom-2 right-2 rounded-xl bg-base-100/85 px-3 py-1 text-xs text-love-300"
+          >
+            Remover
+          </button>
+        </div>
+      {% empty %}
+        <div class="col-span-2 rounded-2xl border border-dashed border-base-300 p-5 text-center text-sm text-base-400">Nenhuma foto adicionada ainda.</div>
+      {% endfor %}
+    </div>
+  </article>
+</section>
+{% endblock %}
