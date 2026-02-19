@@ -184,3 +184,4 @@ Valor fixo: **R$ 3,99** (pagamento único)
 ## Observações
 - Em desenvolvimento, o botão de simulação permite concluir pagamentos sem gateways reais.
 - Para produção, configure HTTPS, segredos reais e URLs públicas de webhook.
+- Nota: este commit contém um ajuste mínimo para validar auto-redeploy na Render.
