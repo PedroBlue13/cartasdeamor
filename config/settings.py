@@ -91,7 +91,12 @@ STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 MEDIA_URL = "/media/"
 configured_media_root = config("MEDIA_ROOT", default="").strip()
 MEDIA_ROOT = Path(configured_media_root) if configured_media_root else BASE_DIR / "media"
-MEDIA_ROOT.mkdir(parents=True, exist_ok=True)
+try:
+    MEDIA_ROOT.mkdir(parents=True, exist_ok=True)
+except OSError:
+    # Render build phase can run before disk mount (/var/data), so fallback safely.
+    MEDIA_ROOT = BASE_DIR / "media"
+    MEDIA_ROOT.mkdir(parents=True, exist_ok=True)
 MEDIA_FALLBACK_DIRS = [
     str(MEDIA_ROOT),
     str(BASE_DIR / "media"),
